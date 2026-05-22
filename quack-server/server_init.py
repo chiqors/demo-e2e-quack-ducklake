@@ -18,13 +18,19 @@ con.execute("INSTALL postgres; LOAD postgres;")
 con.execute("INSTALL quack; LOAD quack;")
 con.execute("INSTALL ducklake; LOAD ducklake;")
 
-# Map out S3 variables for MinIO
+# Configure a scoped S3 secret for MinIO-backed DuckLake data files.
 con.execute(f"""
-    SET s3_endpoint='{s3_endpoint}';
-    SET s3_access_key_id='{s3_access_key}';
-    SET s3_secret_access_key='{s3_secret_key}';
-    SET s3_url_style='path';
-    SET s3_use_ssl=false;
+    CREATE OR REPLACE SECRET ducklake_s3 (
+        TYPE s3,
+        PROVIDER config,
+        KEY_ID '{s3_access_key}',
+        SECRET '{s3_secret_key}',
+        REGION 'us-east-1',
+        ENDPOINT '{s3_endpoint}',
+        URL_STYLE 'path',
+        USE_SSL false,
+        SCOPE 's3://{s3_bucket}/'
+    );
 """)
 
 print("Attaching DuckLake to Postgres Catalog and S3 storage layout...")

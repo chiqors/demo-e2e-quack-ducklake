@@ -34,8 +34,9 @@ flowchart LR
 ## Project Layout
 
 - [docker-compose.yml](/Users/administrator/Documents/Labs/e2e-ducklake/docker-compose.yml:1): full stack wiring for MinIO, Postgres, Quack server, and consumer
-- [quack-server/server_init.py](/Users/administrator/Documents/Labs/e2e-ducklake/quack-server/server_init.py:1): starts DuckDB `1.5.3`, loads extensions, attaches DuckLake, and serves Quack
+- [quack-server/server_init.py](/Users/administrator/Documents/Labs/e2e-ducklake/quack-server/server_init.py:1): starts DuckDB `1.5.3`, loads extensions, configures the scoped S3 secret for MinIO, attaches DuckLake, and serves Quack
 - [duckdb-consumer/query_worker.mjs](/Users/administrator/Documents/Labs/e2e-ducklake/duckdb-consumer/query_worker.mjs:1): Node Neo client that connects through Quack and executes the e2e validation query flow
+- [duckdb-consumer/bulk_insert_test.mjs](/Users/administrator/Documents/Labs/e2e-ducklake/duckdb-consumer/bulk_insert_test.mjs:1): bulk-write test for forcing a larger DuckLake object-storage write
 
 ## Run
 
@@ -50,7 +51,31 @@ After startup, the consumer will:
 - insert a sample row
 - read the table back and print the results
 
+## Bulk Write Test
+
+To test a larger write that materializes a real DuckLake data file in MinIO, run:
+
+```bash
+docker cp duckdb-consumer/bulk_insert_test.mjs duckdb_quack_client:/app/bulk_insert_test.mjs
+docker exec duckdb_quack_client node /app/bulk_insert_test.mjs
+```
+
+This script:
+
+- clears the `orders` table
+- inserts `50000` rows through Quack
+- prints the final row count and ID range
+
+Expected result:
+
+- DuckLake metadata registers a Parquet data file
+- MinIO shows objects under `healthcare-lake/my_ducklake_data/main/orders`
+
+The current verified bulk test result in this repo created a DuckLake data file with `50000` rows.
+
 ## Notes
 
 - This repo is intentionally minimal and focused on demonstration, not production hardening.
+- Small writes may remain inline in the DuckLake catalog, so they will not immediately appear in MinIO.
+- Larger writes, such as the included bulk test, create object-backed Parquet files under the configured DuckLake `DATA_PATH`.
 - Re-running the stack may produce duplicate sample rows unless you clear the backing storage and metadata first.
