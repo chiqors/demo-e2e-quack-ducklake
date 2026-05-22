@@ -33,10 +33,10 @@ flowchart LR
 
 ## Project Layout
 
-- [docker-compose.yml](/Users/administrator/Documents/Labs/e2e-ducklake/docker-compose.yml:1): full stack wiring for MinIO, Postgres, Quack server, and consumer
-- [quack-server/server_init.py](/Users/administrator/Documents/Labs/e2e-ducklake/quack-server/server_init.py:1): starts DuckDB `1.5.3`, loads extensions, configures the scoped S3 secret for MinIO, attaches DuckLake, and serves Quack
-- [duckdb-consumer/query_worker.mjs](/Users/administrator/Documents/Labs/e2e-ducklake/duckdb-consumer/query_worker.mjs:1): Node Neo client that connects through Quack and executes the e2e validation query flow
-- [duckdb-consumer/bulk_insert_test.mjs](/Users/administrator/Documents/Labs/e2e-ducklake/duckdb-consumer/bulk_insert_test.mjs:1): bulk-write test for forcing a larger DuckLake object-storage write
+- [docker-compose.yml](docker-compose.yml): full stack wiring for MinIO, Postgres, Quack server, and consumer
+- [quack-server/server_init.py](quack-server/server_init.py): starts DuckDB `1.5.3`, loads extensions, configures the scoped S3 secret for MinIO, attaches DuckLake, and serves Quack
+- [duckdb-consumer/query_worker.mjs](duckdb-consumer/query_worker.mjs): Node Neo client that connects through Quack and executes the e2e validation query flow
+- [duckdb-consumer/bulk_insert_test.mjs](duckdb-consumer/bulk_insert_test.mjs): bulk-write test for forcing a larger DuckLake object-storage write
 
 ## Run
 
