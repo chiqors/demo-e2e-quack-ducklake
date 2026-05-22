@@ -53,7 +53,7 @@ After startup, the consumer will:
 
 ## Bulk Write Test
 
-To test a larger write that materializes a real DuckLake data file in MinIO, run:
+To test a larger write that materializes a real DuckLake data file in MinIO (bypassing DuckLake's data inlining for small writes), run:
 
 ```bash
 docker cp duckdb-consumer/bulk_insert_test.mjs duckdb_quack_client:/app/bulk_insert_test.mjs
@@ -65,6 +65,8 @@ This script:
 - clears the `orders` table
 - inserts `50000` rows through Quack
 - prints the final row count and ID range
+
+This bulk write is necessary to force DuckLake to write data to object storage (MinIO) rather than keeping it inline in the catalog.
 
 Expected result:
 
