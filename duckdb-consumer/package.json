@@ -1,0 +1,11 @@
+{
+  "name": "duckdb-consumer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node /app/query_worker.mjs"
+  },
+  "dependencies": {
+    "@duckdb/node-api": "1.5.3-r.1"
+  }
+}

@@ -71,5 +71,4 @@ services:
         condition: service_healthy
     environment:
       - QUACK_HOST=quack-server:9494
-      - PYTHONUNBUFFERED=1
-    command: python /app/query_worker.py
+    command: npm start

@@ -1,4 +1,5 @@
-FROM python:3.11-slim
+FROM node:22-slim
 WORKDIR /app
-RUN pip install --no-cache-dir duckdb==1.5.3
-COPY query_worker.py /app/query_worker.py
+COPY package.json /app/package.json
+RUN npm install --omit=dev
+COPY query_worker.mjs /app/query_worker.mjs
